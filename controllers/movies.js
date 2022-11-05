@@ -7,9 +7,7 @@ module.exports.getMovies = (req, res, next) => {
   const owner = req.user._id;
   Movies.find({ owner })
     .then((movies) => {
-      if (!movies) {
-        throw new NotFoundError(' Сохраненные фильмы не найдены.');
-      } res.send(movies);
+      res.send(movies);
     })
     .catch(next);
 };
@@ -26,7 +24,7 @@ module.exports.createMovie = (req, res, next) => {
       nameRU: newMovie.nameRU,
       nameEN: newMovie.nameEN,
       image: newMovie.image,
-      trailer: newMovie.trailer,
+      trailerLink: newMovie.trailerLink,
       thumbnail: newMovie.thumbnail,
       movieId: newMovie.movieId,
     }))
@@ -41,7 +39,8 @@ module.exports.createMovie = (req, res, next) => {
 
 module.exports.deleteMovie = (req, res, next) => {
   const owner = req.user._id;
-  Movies.findById(req.params.movieId)
+  const { movieId } = req.params;
+  Movies.findOne({ movieId })
     .then((movie) => {
       if (!movie) {
         throw new NotFoundError(' Фильм с указанным _id не найден.');
@@ -49,7 +48,8 @@ module.exports.deleteMovie = (req, res, next) => {
         throw new ForbiddenError('Доступ ограничен');
       }
       movie.remove()
-        .then(() => res.send({ message: 'Фильм удален' }));
+        .then(() => res.send({ message: 'Фильм удален' }))
+        .catch(next);
     })
     .catch((err) => {
       if (err.name === 'CastError') {

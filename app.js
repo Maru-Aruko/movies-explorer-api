@@ -6,10 +6,12 @@ const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
 const helmet = require('helmet');
 const cors = require('./middlewares/cors');
-const routes = require('./routes/index');
+const routes = require('./routes');
 const handleError = require('./middlewares/handleError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const rateLimiter = require('./utils/rateLimiter');
+
+const MONGO_DB = require('./utils/constants');
 
 const { PORT = 3000 } = process.env;
 
@@ -17,7 +19,7 @@ const app = express();
 
 app.use(cookieParser());
 
-mongoose.connect('mongodb://localhost:27017/moviesdb', {
+mongoose.connect(MONGO_DB, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });

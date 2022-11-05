@@ -9,7 +9,7 @@ const NotFoundError = require('../Errors/NotFoundError');
 router.post('/signup', validateSignup, createUser);
 router.post('/signin', validateLogin, login);
 
-router.get('/signout', (req, res) => {
+router.get('/signout', auth, (req, res) => {
   res.clearCookie('jwt').send({ message: 'Выход' });
 });
 

@@ -1,12 +1,6 @@
 const { celebrate, Joi } = require('celebrate');
 const { regexURL } = require('../utils/utils');
 
-module.exports.validateId = celebrate({
-  params: Joi.object().keys({
-    _id: Joi.string().alphanum().length(24).hex(),
-  }),
-});
-
 module.exports.validateUpdateProfile = celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
@@ -16,24 +10,23 @@ module.exports.validateUpdateProfile = celebrate({
 
 module.exports.validateCreateMovie = celebrate({
   body: Joi.object().keys({
-    country: Joi.string().required().min(1).max(100),
-    director: Joi.string().required().min(1).max(100),
+    country: Joi.string().required(),
+    director: Joi.string().required(),
     duration: Joi.number().required(),
-    year: Joi.string().required().min(2).max(4),
-    description: Joi.string().required().min(1).max(5000),
-    nameRU: Joi.string().required().min(1).max(100),
-    nameEN: Joi.string().required().min(1).max(100),
+    year: Joi.string().required(),
+    description: Joi.string().required(),
     image: Joi.string().required().custom(regexURL),
-    trailer: Joi.string().required().custom(regexURL),
+    trailerLink: Joi.string().required().custom(regexURL),
     thumbnail: Joi.string().required().custom(regexURL),
     movieId: Joi.number().required(),
+    nameRU: Joi.string().required(),
+    nameEN: Joi.string().required(),
   }),
 });
 
 module.exports.validateDeleteMovie = celebrate({
   params: Joi.object().keys({
-    movieId: Joi.string().required().alphanum().length(24)
-      .hex(),
+    movieId: Joi.string().hex().required(),
   }),
 });
 

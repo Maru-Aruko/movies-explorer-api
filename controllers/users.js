@@ -28,6 +28,9 @@ module.exports.updateProfile = (req, res, next) => {
       if (!updatedUser) {
         throw new NotFoundError(' Пользователь по указанному _id не найден.');
       }
+      if (updatedUser.email === email) {
+        throw new ConflictError('email не был изменен');
+      }
       return res.send({
         name: updatedUser.name,
         email: updatedUser.email,
@@ -79,7 +82,7 @@ module.exports.login = (req, res, next) => {
             throw new UnauthorizedError('Неправильные почта или пароль');
           }
           const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
-          return res.cookie('jwt', token, { maxAge: 3600000 * 7, httpOnly: true, sameSite: true }).send({ token });
+          return res.cookie('jwt', token, { maxAge: 3600000 * 7, httpOnly: true, sameSite: true }).send({ message: 'Вы успешно авторизованы' });
         });
     })
     .catch(next);
