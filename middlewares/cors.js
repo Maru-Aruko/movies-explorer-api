@@ -1,6 +1,6 @@
 const allowedCors = [
-  '',
-  '',
+  'api.movies-explorer.maru.nomoredomains.icu',
+  'movies-explorer.maru.nomoredomains.icu',
 ];
 
 const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
