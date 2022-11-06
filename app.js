@@ -11,7 +11,7 @@ const handleError = require('./middlewares/handleError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const rateLimiter = require('./utils/rateLimiter');
 
-const MONGO_DB = require('./utils/constants');
+const { MONGO_DB } = require('./utils/constants');
 
 const { PORT = 3000 } = process.env;
 

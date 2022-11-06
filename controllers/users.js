@@ -8,11 +8,16 @@ const ValidError = require('../Errors/ValidError');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
+const {
+  USER_NOT_FOUND, USER_INVALID_DATA, USER_CONFLICT_EMAIL, USER_INVALID_SIGNUP,
+  INVALID_EMAIL_OR_PASS, SUCCESSFUL_LOGIN,
+} = require('../utils/constants');
+
 module.exports.getInfoAboutMe = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
-        throw new NotFoundError(' Пользователь по указанному _id не найден.');
+        throw new NotFoundError(USER_NOT_FOUND);
       } return res.send({
         name: user.name,
         email: user.email,
@@ -26,10 +31,7 @@ module.exports.updateProfile = (req, res, next) => {
   User.findByIdAndUpdate(req.user._id, { name, email }, { new: true, runValidators: true })
     .then((updatedUser) => {
       if (!updatedUser) {
-        throw new NotFoundError(' Пользователь по указанному _id не найден.');
-      }
-      if (updatedUser.email === email) {
-        throw new ConflictError('email не был изменен');
+        throw new NotFoundError(USER_NOT_FOUND);
       }
       return res.send({
         name: updatedUser.name,
@@ -38,7 +40,10 @@ module.exports.updateProfile = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new ValidError('Переданные некорректные данные при обновлении профиля'));
+        next(new ValidError(USER_INVALID_DATA));
+      }
+      if (err.code === 11000) {
+        next(new ConflictError(USER_CONFLICT_EMAIL));
       } else {
         next(err);
       }
@@ -60,9 +65,9 @@ module.exports.createUser = (req, res, next) => {
     }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new ValidError(' Переданы некорректные данные при создании пользователя.'));
+        next(new ValidError(USER_INVALID_SIGNUP));
       } else if (err.code === 11000) {
-        next(new ConflictError('Пользователь с этим email уже зарегистрирован в системе'));
+        next(new ConflictError(USER_CONFLICT_EMAIL));
       } else {
         next(err);
       }
@@ -74,15 +79,15 @@ module.exports.login = (req, res, next) => {
   User.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        throw new UnauthorizedError('Неправильные почта или пароль');
+        throw new UnauthorizedError(INVALID_EMAIL_OR_PASS);
       }
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            throw new UnauthorizedError('Неправильные почта или пароль');
+            throw new UnauthorizedError(INVALID_EMAIL_OR_PASS);
           }
           const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
-          return res.cookie('jwt', token, { maxAge: 3600000 * 7, httpOnly: true, sameSite: true }).send({ message: 'Вы успешно авторизованы' });
+          return res.cookie('jwt', token, { maxAge: 3600000 * 7, httpOnly: true, sameSite: true }).send({ message: SUCCESSFUL_LOGIN });
         });
     })
     .catch(next);
