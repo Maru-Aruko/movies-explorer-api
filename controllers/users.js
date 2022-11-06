@@ -10,7 +10,7 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 
 const {
   USER_NOT_FOUND, USER_INVALID_DATA, USER_CONFLICT_EMAIL, USER_INVALID_SIGNUP,
-  INVALID_EMAIL_OR_PASS, SUCCESSFUL_LOGIN,
+  INVALID_EMAIL_OR_PASS, SUCCESSFUL_LOGIN, MONGO_DUPLICATE_ERR,
 } = require('../utils/constants');
 
 module.exports.getInfoAboutMe = (req, res, next) => {
@@ -42,7 +42,7 @@ module.exports.updateProfile = (req, res, next) => {
       if (err.name === 'ValidationError') {
         next(new ValidError(USER_INVALID_DATA));
       }
-      if (err.code === 11000) {
+      if (err.code === MONGO_DUPLICATE_ERR) {
         next(new ConflictError(USER_CONFLICT_EMAIL));
       } else {
         next(err);
