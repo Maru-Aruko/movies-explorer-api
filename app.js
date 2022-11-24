@@ -31,9 +31,13 @@ app.use(requestLogger);
 
 app.use(rateLimiter);
 
-app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
+app.use(
+  helmet({
+    crossOriginEmbedderPolicy: false,
+  })
+);
 
-//app.use(cors);
+app.use(cors);
 
 app.use(routes);
 
