@@ -16,6 +16,7 @@ const MOVIE_SUCCESS_DELETE = 'Фильм удалён.';
 const NEED_AUTHORIZE = 'Необходима авторизация.';
 const INVALID_EMAIL_OR_PASS = 'Неправильные почта или пароль';
 const SUCCESSFUL_LOGIN = 'Вы успешно авторизованы';
+const SUCCESSFUL_EXIT = 'Выход';
 
 const SERVER_ERROR_MESSAGE = 'На сервере произошла ошибка.';
 
@@ -37,6 +38,7 @@ module.exports = {
   NEED_AUTHORIZE,
   INVALID_EMAIL_OR_PASS,
   SUCCESSFUL_LOGIN,
+  SUCCESSFUL_EXIT,
   SERVER_ERROR_MESSAGE,
   PAGE_NOT_FOUND,
   MONGO_DUPLICATE_ERR,

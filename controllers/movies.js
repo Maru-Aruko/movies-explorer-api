@@ -3,7 +3,10 @@ const NotFoundError = require('../Errors/NotFoundError');
 const ValidError = require('../Errors/ValidError');
 const ForbiddenError = require('../Errors/ForbiddenError');
 
-const { MOVIE_INVALID_DATA, MOVIE_NOT_FOUND, MOVIE_INVALID_ID, MOVIE_FORBIDDEN_DELETE, MOVIE_SUCCESS_DELETE, } = require('../utils/constants');
+const {
+  MOVIE_INVALID_DATA, MOVIE_NOT_FOUND, MOVIE_INVALID_ID, MOVIE_FORBIDDEN_DELETE,
+  MOVIE_SUCCESS_DELETE,
+} = require('../utils/constants');
 
 module.exports.getMovies = (req, res, next) => {
   const owner = req.user._id;
@@ -17,20 +20,7 @@ module.exports.getMovies = (req, res, next) => {
 module.exports.createMovie = (req, res, next) => {
   const owner = req.user._id;
   Movies.create({ owner, ...req.body })
-    .then((newMovie) => res.send({
-      country: newMovie.country,
-      director: newMovie.director,
-      duration: newMovie.duration,
-      year: newMovie.year,
-      description: newMovie.description,
-      nameRU: newMovie.nameRU,
-      nameEN: newMovie.nameEN,
-      image: newMovie.image,
-      trailerLink: newMovie.trailerLink,
-      thumbnail: newMovie.thumbnail,
-      movieId: newMovie.movieId,
-      owner,
-    }))
+    .then((newMovie) => res.send(newMovie))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new ValidError(MOVIE_INVALID_DATA));

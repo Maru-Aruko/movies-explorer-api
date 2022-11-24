@@ -1,4 +1,5 @@
 const allowedCors = [
+  'localhost:3000',
   'api.movies-explorer.maru.nomoredomains.icu',
   'movies-explorer.maru.nomoredomains.icu',
 ];
