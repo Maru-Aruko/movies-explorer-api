@@ -31,9 +31,9 @@ app.use(requestLogger);
 
 app.use(rateLimiter);
 
-app.use(helmet());
+//app.use(helmet());
 
-app.use(cors);
+//app.use(cors);
 
 app.use(routes);
 
