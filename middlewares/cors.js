@@ -1,7 +1,7 @@
 const allowedCors = [
   'http://localhost:3000/',
-  'api.movies-explorer.maru.nomoredomains.icu',
-  'movies-explorer.maru.nomoredomains.icu',
+  'https://api.movies-explorer.maru.nomoredomains.icu',
+  'https://movies-explorer.maru.nomoredomains.icu',
 ];
 
 const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
