@@ -31,11 +31,7 @@ app.use(requestLogger);
 
 app.use(rateLimiter);
 
-app.use(
-  helmet({
-    crossOriginEmbedderPolicy: false,
-  })
-);
+app.use(helmet());
 
 app.use(cors);
 
